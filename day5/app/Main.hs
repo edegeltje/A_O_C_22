@@ -29,7 +29,7 @@ doAction a@(Action n f t) = do
   crate <- mapM (const (popCrate f)) [1..n]
   let puzzle1 = crate
   let puzzle2 = reverse crate
-  mapM_ (putCrate t) puzzle2
+  mapM_ (putCrate t) (reverse crate)
 
 popCrate :: Int -> State Yard Char
 popCrate n = do
