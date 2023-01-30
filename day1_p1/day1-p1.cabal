@@ -29,7 +29,7 @@ executable day1-p1
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:    bases
+    build-depends:    base
                     , split
     hs-source-dirs:   app
     default-language: Haskell2010
