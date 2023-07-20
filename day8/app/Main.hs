@@ -41,7 +41,7 @@ makeBoolTable :: [[a]] -> [[YesNo a]]
 makeBoolTable = map (map No)
 
 orVisible :: Ord a => [YesNo a] -> [YesNo a]
-orVisible (a:as) = changeToYes a: (orVisible' (getVal a) as)
+orVisible (a:as) = changeToYes a: changeToYes a : orVisible' (getVal a) as
 
 orVisible'  :: Ord a => a -> [YesNo a] -> [YesNo a]
 orVisible' _ [] = []
@@ -54,7 +54,7 @@ roll :: [a] -> [a]
 roll (a:as) = as ++ [a]
 
 rollNTimes :: Int -> [a] -> [a]
-rollNTimes n = flip (foldr (id)) [roll | i <- [1..n]]
+rollNTimes n = flip (foldr id) [roll | i <- [1..n]]
 
 shiftXY :: (Int,Int) -> [[a]] -> [[a]]
 shiftXY (x,y) = rollNTimes y . map (rollNTimes x)
@@ -62,7 +62,7 @@ shiftXY (x,y) = rollNTimes y . map (rollNTimes x)
 
 
 puzzle2 :: [String] -> Int 
-puzzle2 = (\x -> maximum $ [ calculateValue (i,j) x| j <- [0..(length x - 1)], i <- [0..(length (x !! 0) - 1)] ] ) . map (map digitToInt)
+puzzle2 = (\x -> maximum $ [ calculateValue (i,j) x| j <- [0..(length x - 1)], i <- [0..(length (head x) - 1)] ] ) . map (map digitToInt)
 
 getCoords :: (Int,Int) -> [[Int]] -> Int
 getCoords (x,y) = (!! x) . (!! y)
@@ -76,10 +76,10 @@ checkElement coords forestMap = undefined
 checkVisible :: Int -> [Int] -> Int
 checkVisible _ [] = 0
 checkVisible high (a:as) = 1 + 
-    if (a<high) then checkVisible high as else 0
+    if a < high then checkVisible high as else 0
 
 getFourDirections :: (Int,Int) -> [[Int]] -> [[Int]]
-getFourDirections (x,y) forestMap = concat $ map removeCenter [splitAt x (forestMap !! y), splitAt y (transpose forestMap !! x)]
+getFourDirections (x,y) forestMap = concatMap removeCenter [splitAt x (forestMap !! y), splitAt y (transpose forestMap !! x)]
 
 removeCenter :: ([a],[a])-> [[a]]
 removeCenter (a,b:bs)=[ reverse a,bs]
